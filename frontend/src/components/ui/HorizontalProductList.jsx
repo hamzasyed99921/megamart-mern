@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import ProductCard from './ProductCard';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { getProducts } from '@/api/internal';
 
 const Loader = () => (

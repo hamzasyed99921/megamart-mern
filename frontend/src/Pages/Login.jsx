@@ -1,6 +1,8 @@
 import { login } from '@/api/internal';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { setUser } from '../../store/slices/userSlice';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -9,6 +11,8 @@ const Login = () => {
   const [submitting, setSubmitting] = useState(false);
   const [message,setMessage] = useState({type: '', message: ''})
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,11 +29,17 @@ const Login = () => {
       
       if(response.status === 200){
         setSubmitting(false)
+        //1. setUser
+        const user = {
+          _id: response.data.user._id,
+          email: response.data.user.email,
+          username: response.data.user.username,
+          auth: response.data.auth,
+          role: response.data.user.role
+        }
+        // console.log(user);
+        dispatch(setUser(user))
         setMessage({type: 'success', message: 'User Login Successfully!'})
-        localStorage.setItem('token', response.data.user.username)
-        localStorage.setItem('auth', response.data.auth);
-        localStorage.setItem('email', response.data.user.email);
-        localStorage.setItem('role', response.data.user.role);
 
         
         window.dispatchEvent(new Event('authChange'));

@@ -35,11 +35,11 @@ export const login = async(data) => {
     
 }
 
-export const logout = async(data) => {
+export const logout = async() => {
     let response;
 
     try {
-        response =  await api.post('/login', data)
+        response =  await api.post('/logout')
     } catch (error) {
         return error
     }

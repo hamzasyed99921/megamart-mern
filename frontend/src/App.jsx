@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
 import Home from './Pages/Home';
 import Orders from './Pages/Orders';
+import ShowOrders from './Pages/ShowOrders';
 import Base from './Layouts/Base';
 import Aos from 'aos';
 import "aos/dist/aos.css";
@@ -20,6 +21,7 @@ import UpdateProduct from './Pages/UpdateProduct';
 import Category from './Pages/Category';
 import About from './Pages/About';
 import Checkout from './Pages/Checkout';
+import { useSelector } from 'react-redux';
 
 function App() {
   useEffect(() => {
@@ -28,6 +30,10 @@ function App() {
     });
     Aos.refresh();
   }, []);
+
+  const isAuth = useSelector((state) => state.user.auth);
+
+  console.log(isAuth)
 
   return (
     <>
@@ -48,6 +54,7 @@ function App() {
           <Route path="/edit-product/:id" element={<UpdateProduct/>} />
           <Route path="/category" element={<Category/>} />
           <Route path="/orders" element={<Orders/>} />
+          <Route path="/my-orders" element={<ShowOrders/>} />
           <Route path="/checkout" element={<Checkout/>} />
           {/* <Route path="/*" element={<PageNotFound />}/> */}
         </Routes>

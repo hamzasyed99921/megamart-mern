@@ -4,6 +4,9 @@ import { IoIosClose } from "react-icons/io";
 import { FiUser, FiShoppingCart, FiMenu } from "react-icons/fi";
 import fetchProducts from '../utils/fetchProducts';
 import { useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "@/api/internal";
+import { resetUser } from "../../store/slices/userSlice";
 
 const navLinks = [
   { name: "Home", to: "/" },
@@ -15,13 +18,15 @@ const navLinks = [
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen((v) => !v);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const searchTimeout = useRef();
   const [cartCount, setCartCount] = useState(0);
+
+  const dispatch = useDispatch();
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -50,15 +55,8 @@ const Header = () => {
     setSearchTerm("");
   };
 
-  useEffect(() => {
-    const checkLogin = () => {
-      const loggedInUser = localStorage.getItem('auth');
-      setIsLoggedIn(!!loggedInUser);
-    };
-    checkLogin();
-    window.addEventListener('authChange', checkLogin);
-    return () => window.removeEventListener('authChange', checkLogin);
-  }, []);
+  const isLoggedIn = useSelector((state) => state.user.auth);
+
 
   // Update cart count on mount and when cart changes
   useEffect(() => {
@@ -77,10 +75,9 @@ const Header = () => {
     };
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('auth');
-    window.dispatchEvent(new Event('authChange'));
-    setIsLoggedIn(false);
+  const handleLogout = async () => {
+     await logout();
+    dispatch(resetUser());
   };
 
   return (

@@ -1,18 +1,13 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import { addItemToCart } from '@/utils/cart';
+import { useSelector } from 'react-redux';
 
 const ProductCard = ({ id, title, image, name, price, discount, isActive, stock }) => {
-  const [username, setUsername] = useState('');
   const productName = name || title;
   const productSlug = id || productName; // fallback to name/title for routes expecting a slug
   const discountedPrice = discount ? (price - (price * discount) / 100).toFixed(2) : price;
-
-  useEffect(() => {
-    const loggedInUser = localStorage.getItem('token');
-    setUsername(loggedInUser);
-  }, []);
+  const {username} = useSelector((state) => state.user);
 
   const handleAddToCart = (e) => {
     if (e) {

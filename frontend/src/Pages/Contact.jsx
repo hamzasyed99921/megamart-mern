@@ -1,6 +1,7 @@
 import { contact } from '@/api/internal';
 import { useEffect, useState } from 'react';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaHeadset } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -10,21 +11,21 @@ const Contact = () => {
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({type: '', text: ''});
+  const {username,email} = useSelector((state) => state.user);
+  // console.log(email)
 
   // Auto-fill form with user data if logged in
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const email = localStorage.getItem('email');
     
-    if (token && email) {
+    if (username && email) {
       // If user is logged in, pre-fill the name field
       setFormData(prev => ({
         ...prev,
-        name: token, // Using token as name since that's what's stored
+        name: username, // Using username as name since that's what's stored
         email
       }));
     }
-  }, []);
+  }, [username, email]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -48,7 +49,7 @@ const Contact = () => {
     try {
       
       const response = await contact(data)
-      console.log(response.status)
+      // console.log(response.status)
       if(response.status === 201){
         setMessage({type: 'success', text: 'Your message was sent successfully!' });
         setFormData({

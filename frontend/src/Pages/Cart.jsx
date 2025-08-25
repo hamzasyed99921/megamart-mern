@@ -21,7 +21,17 @@ const Cart = () => {
   };
 
   if (cart.length === 0) {
-    return <div className="min-h-[60vh] flex items-center justify-center text-xl text-blue-700">Your cart is empty.</div>;
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center gap-6 text-blue-700">
+        <div className="text-xl">Your cart is empty.</div>
+        <Link
+          to="/my-orders"
+          className="inline-block px-6 py-3 bg-gradient-to-r from-purple-400 to-indigo-600 text-white rounded-xl font-bold shadow-lg hover:from-indigo-600 hover:to-purple-400 transition-all duration-200"
+        >
+          See Your Orders
+        </Link>
+      </div>
+    );
   }
 
   return (
@@ -58,9 +68,15 @@ const Cart = () => {
           <div className="text-2xl font-bold text-blue-900">
             Grand Total: ${getTotal().toFixed(2)}
           </div>
-          <Link to="/checkout" className="inline-block px-6 py-3 bg-gradient-to-r from-cyan-400 to-blue-600 text-white rounded-xl font-bold shadow-lg hover:from-blue-600 hover:to-cyan-400 transition-all duration-200">
-            Proceed to Checkout
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link to="/checkout" className="inline-block px-6 py-3 bg-gradient-to-r from-cyan-400 to-blue-600 text-white rounded-xl font-bold shadow-lg hover:from-blue-600 hover:to-cyan-400 transition-all duration-200">
+              Proceed to Checkout
+            </Link>
+            <Link to="/my-orders" className="inline-block px-6 py-3 bg-gradient-to-r from-purple-400 to-indigo-600 text-white rounded-xl font-bold shadow-lg hover:from-indigo-600 hover:to-purple-400 transition-all duration-200">
+              See Your Orders
+            </Link>
+          </div>
+            
         </div>
       </div>
     </div>

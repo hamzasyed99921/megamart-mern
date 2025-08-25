@@ -1,5 +1,6 @@
 import { createProducts } from '@/api/internal';
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -18,24 +19,13 @@ const Account = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const navigate = useNavigate()
 
   // Default image for preview
   const DEFAULT_IMAGE = 'https://via.placeholder.com/300x200?text=No+Image';
 
-  useEffect(() => {
-    // Check if user is logged in
-    const checkLogin = () => {
-      const loggedInUser = localStorage.getItem('auth');
-      setIsLoggedIn(!!loggedInUser);
-    };
-    checkLogin();
-    window.addEventListener('authChange', checkLogin);
-    return () => window.removeEventListener('authChange', checkLogin);
-    
-  }, []);
+  const isLoggedIn = useSelector((state) => state.user.auth);
 
   const handleChange = async (e) => {
     const { name, value, type, files, checked } = e.target;

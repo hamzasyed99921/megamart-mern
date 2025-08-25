@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import { getProducts, getOrders, approveOrder } from '@/api/internal';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 const Admin = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+
+  const {auth:isLoggedIn, role:isAdmin} = useSelector((state) => state.user);
+
+  // console.log(isLoggedIn, isAdmin)
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -27,20 +30,6 @@ const Admin = () => {
     };
     fetchProducts();
   }, []);
-
-   useEffect(() => {
-      // Check if user is logged in
-      const checkLogin = () => {
-        const loggedInUser = localStorage.getItem('auth');
-        const loggedInRole = localStorage.getItem('role');
-        setIsLoggedIn(!!loggedInUser);
-        setIsAdmin(loggedInRole === 'admin');
-      };
-      checkLogin();
-      window.addEventListener('authChange', checkLogin);
-      return () => window.removeEventListener('authChange', checkLogin);
-      
-    }, []);
 
     const [orders, setOrders] = useState([]);
 
@@ -86,7 +75,7 @@ const Admin = () => {
     }
   };
 
-  if (!isLoggedIn || !isAdmin) {
+  if (!isLoggedIn || isAdmin !== 'admin') {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center bg-gradient-to-br from-cyan-100/40 via-white/60 to-purple-100/40 py-12 px-2">
         <div className="w-full max-w-xl bg-white/30 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-cyan-200/40 futuristic-card text-center">
